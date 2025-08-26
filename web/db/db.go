@@ -35,4 +35,21 @@ func ConnectDB() {
 
 	Pool = pool
 	log.Println("Connected to PostgreSQL")
+
+	// Auto-create todos table if it doesn't exist
+	_, err = Pool.Exec(context.Background(), `
+		CREATE TABLE IF NOT EXISTS todos (
+			id SERIAL PRIMARY KEY,
+    		title VARCHAR(255) NOT NULL,
+		    description TEXT,
+		    status BOOLEAN DEFAULT FALSE,
+		    created_at TIMESTAMP DEFAULT NOW(),
+		    updated_at TIMESTAMP DEFAULT NOW()
+		)
+	`)
+	if err != nil {
+		log.Fatal("Unable to create todos table:", err)
+	}
+
+	log.Println("Todos table checked/created")
 }
