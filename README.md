@@ -1,2 +1,2 @@
 # TasklyGo
-A simple web based todo app
+A simple todo app
