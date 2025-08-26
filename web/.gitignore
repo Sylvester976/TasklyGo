@@ -6,7 +6,6 @@
 *.dylib
 
 # Go modules
-/go.sum
 /vendor/
 
 # Binaries
