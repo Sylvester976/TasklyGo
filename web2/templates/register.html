@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>TasklyGo - Sign Up</title>
+    <link href="/static/img/logofav.svg" rel="icon" type="image/x-icon">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/all.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+<body>
+<div class="container registration-container">
+    <div class="card">
+        <div class="card-body p-5">
+            <div class="text-center mb-4">
+
+                <h2 class="fw-bold mb-2" style="color: #333;">
+                    <svg height="100" viewBox="0 0 300 100" width="300" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="badgeGradient" x1="0%" x2="100%" y1="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#10B981"/>
+                                <stop offset="100%" style="stop-color:#059669"/>
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Badge shape -->
+                        <path d="M30 30 L60 30 L70 50 L60 70 L30 70 L20 50 Z" fill="url(#badgeGradient)"/>
+
+                        <!-- Arrow -->
+                        <path d="M35 50 L50 50 M45 45 L50 50 L45 55" fill="none" stroke="white"
+                              stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+
+                        <!-- Text -->
+                        <text fill="#1F2937" font-family="Arial, sans-serif" font-size="32" font-weight="800" x="90"
+                              y="58">
+                            <tspan fill="#10B981">Taskly</tspan>
+                            <tspan fill="#059669">Go</tspan>
+                        </text>
+                    </svg>
+                </h2>
+                <p class="text-muted">Create your account to get started</p>
+            </div>
+
+            <form action="/signup" class="login-form" method="post">
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="firstName" name="firstName" placeholder="First Name" required
+                           type="text">
+                    <label for="firstName">First Name</label>
+                    <div class="invalid-feedback" id="firstNameError">Please provide your first name.</div>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="surname" name="surname" placeholder="Surname" required type="text">
+                    <label for="surname">Surname</label>
+                    <div class="invalid-feedback" id="surnameError">Please provide your surname.</div>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="email" name="email" placeholder="Email" required type="email">
+                    <label for="email">Email Address</label>
+                    <div class="invalid-feedback" id="emailError">Please provide a valid email address.</div>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <select class="form-select" id="role" name="role" required>
+                        <option disabled selected value="">Choose a role</option>
+                        {{range .Roles}}
+                        <option value="{{.ID}}">{{.Role}}</option>
+                        {{end}}
+                    </select>
+                    <label for="role">Role</label>
+                    <div class="invalid-feedback" id="roleError">Please select a role.</div>
+                </div>
+
+
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="password" name="password" placeholder="Password" required
+                           type="password">
+                    <label for="password">Password</label>
+                    <div class="invalid-feedback" id="passwordError">Please provide a valid password.</div>
+
+                    <div class="password-strength-container" id="strengthContainer">
+                        <div class="progress">
+                            <div class="progress-bar" id="strengthBar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="strength-text" id="strengthText">Enter password to check strength</div>
+                        <div class="password-requirements" id="requirementsList">
+                            <div class="requirement unmet" id="lengthReq">
+                                <i class="fas fa-times"></i>
+                                <span>At least 8 characters</span>
+                            </div>
+                            <div class="requirement unmet" id="upperReq">
+                                <i class="fas fa-times"></i>
+                                <span>One uppercase letter</span>
+                            </div>
+                            <div class="requirement unmet" id="lowerReq">
+                                <i class="fas fa-times"></i>
+                                <span>One lowercase letter</span>
+                            </div>
+                            <div class="requirement unmet" id="numberReq">
+                                <i class="fas fa-times"></i>
+                                <span>One number</span>
+                            </div>
+                            <div class="requirement unmet" id="specialReq">
+                                <i class="fas fa-times"></i>
+                                <span>One special character</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-floating mb-4 position-relative">
+                    <input class="form-control" id="confirmPassword" name="confirmPassword"
+                           placeholder="Confirm Password" required
+                           type="password">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="invalid-feedback" id="confirmPasswordError">Passwords do not match.</div>
+                    <div class="match-indicator" id="matchIndicator"></div>
+                </div>
+
+                <div class="d-grid">
+                    <button class="btn btn-primary btn-lg" type="submit">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
+                    </button>
+                </div>
+
+                <div class="text-center mt-4">
+                    <p class="text-muted">Already have an account? <a class="text-decoration-none fw-semibold" href="#"
+                                                                      style="color: #667eea;">Sign In</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/main.js"></script>
+</body>
+</html>
