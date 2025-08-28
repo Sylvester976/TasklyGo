@@ -6,11 +6,15 @@ import (
 	"web2/config"
 	"web2/db"
 	"web2/routes"
+	"web2/session"
 )
 
 func main() {
 	// Load environment variables
 	config.Load()
+
+	// Initialize sessions
+	session.Init()
 
 	// Connect to DB
 	db.ConnectDB()

@@ -1,17 +1,14 @@
 package handlers
 
 import (
-	"github.com/gorilla/sessions"
 	"html/template"
 	"log"
 	"net/http"
 	"strconv"
-	"web2/config"
 	"web2/models"
+	"web2/session"
 	"web2/utils"
 )
-
-var store = sessions.NewCookieStore([]byte(config.SecretKey))
 
 type RegisterData struct {
 	Roles []models.Role
@@ -105,17 +102,16 @@ func AuthRegisterHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
+
 	http.ServeFile(w, r, "./templates/login.html")
 }
 
 func AuthLoginHandler(w http.ResponseWriter, r *http.Request) {
-	// Only allow POST
 	if r.Method != http.MethodPost {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
-	// Parse form data
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "Invalid form submission", http.StatusBadRequest)
 		return
@@ -124,7 +120,6 @@ func AuthLoginHandler(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	password := r.FormValue("password")
 
-	// Validate credentials
 	user, err := models.GetUserByEmailAndPassword(r.Context(), email, password)
 	if err != nil {
 		http.Error(w, "Invalid email or password", http.StatusUnauthorized)
@@ -132,23 +127,31 @@ func AuthLoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create or retrieve session
-	session, err := store.Get(r, "session")
+	sess, err := session.Store.Get(r, "session")
 	if err != nil {
 		http.Error(w, "Could not create session", http.StatusInternalServerError)
 		return
 	}
 
 	// Save user info in session
-	session.Values["userID"] = user.ID
-	session.Values["userName"] = user.Names
-	session.Values["userEmail"] = user.Email
+	sess.Values["userID"] = user.ID
+	sess.Values["userName"] = user.Names
+	sess.Values["userEmail"] = user.Email
 
 	// Commit session
-	if err := session.Save(r, w); err != nil {
+	if err := sess.Save(r, w); err != nil {
+		log.Printf("Session save error: %v", err)
 		http.Error(w, "Could not save session", http.StatusInternalServerError)
 		return
 	}
 
-	// Redirect to dashboard
-	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+	// Redirect based on role
+	switch user.Roles {
+	case 1:
+		http.Redirect(w, r, "/task", http.StatusSeeOther)
+	case 2:
+		http.Redirect(w, r, "/manager", http.StatusSeeOther)
+	default:
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}
 }
