@@ -1,0 +1,6 @@
+rules:
+  - id: "all"          # Applies to all secrets detection rules
+    paths-ignore:
+      - "static/js/*"   # Adjust this path to your JS folder
+      - "assets/js/*"
+      - "public/js/*"
