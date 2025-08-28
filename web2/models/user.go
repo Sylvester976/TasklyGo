@@ -2,9 +2,11 @@ package models
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"web2/db"
+	"web2/utils"
 )
 
 type User struct {
@@ -34,4 +36,34 @@ func (u *User) Create() error {
 		u.Roles,
 		u.Status,
 	).Scan(&u.ID, &u.CreatedAt, &u.UpdatedAt)
+}
+
+func GetUserByEmailAndPassword(ctx context.Context, email, plainPassword string) (*User, error) {
+	var u User
+
+	query := `
+		SELECT id, names, email, password, roles, status, created_at, updated_at
+		FROM users
+		WHERE email = $1
+	`
+	err := db.Pool.QueryRow(ctx, query, email).Scan(
+		&u.ID,
+		&u.Names,
+		&u.Email,
+		&u.Password, // stored hashed password
+		&u.Roles,
+		&u.Status,
+		&u.CreatedAt,
+		&u.UpdatedAt,
+	)
+	if err != nil {
+		return nil, errors.New("user not found")
+	}
+
+	// compare stored hash with entered plain password
+	if !utils.CheckPasswordHash(plainPassword, u.Password) {
+		return nil, errors.New("invalid credentials")
+	}
+
+	return &u, nil
 }

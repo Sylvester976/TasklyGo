@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cf078737-298a-4f0b-b093-7a4aeb66c892" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../web/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../web/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/db.go" beforeDir="false" afterPath="$PROJECT_DIR$/db/db.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/main2.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../web/static/img/logo.svg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,9 +24,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="31rkpdx7fjUqRGORuoPksgkqeGh" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
