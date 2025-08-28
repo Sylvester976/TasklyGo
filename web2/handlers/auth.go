@@ -1,9 +1,11 @@
 package handlers
 
 import (
+	"github.com/joho/godotenv"
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"web2/models"
 	"web2/utils"
@@ -101,5 +103,46 @@ func AuthRegisterHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "./templates/login.html")
+}
 
+func AuthLoginHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		log.Printf("Invalid method %s on %s", r.Method, r.URL.Path)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	// Parse form
+	if err := r.ParseForm(); err != nil {
+		log.Printf("Invalid method %s on %s", r.Method, r.URL.Path)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+
+	// Validate credentials
+	user, err := models.GetUserByEmailAndPassword(r.Context(), email, password)
+	if err != nil {
+		http.Error(w, "Invalid email or password", http.StatusUnauthorized)
+		return
+	}
+
+	// Create a session
+	session, _ := store.Get(r, "session-name")
+
+	// Save user info in session
+	session.Values["userID"] = user.ID
+	session.Values["userName"] = user.Names
+	session.Values["userEmail"] = user.Email
+
+	// Save session to the response
+	err = session.Save(r, w)
+	if err != nil {
+		http.Error(w, "Could not save session", http.StatusInternalServerError)
+		return
+	}
+
+	// Redirect or respond
+	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 }
