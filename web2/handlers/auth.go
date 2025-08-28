@@ -1,15 +1,17 @@
 package handlers
 
 import (
-	"github.com/joho/godotenv"
+	"github.com/gorilla/sessions"
 	"html/template"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
+	"web2/config"
 	"web2/models"
 	"web2/utils"
 )
+
+var store = sessions.NewCookieStore([]byte(config.SecretKey))
 
 type RegisterData struct {
 	Roles []models.Role
@@ -107,17 +109,18 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AuthLoginHandler(w http.ResponseWriter, r *http.Request) {
+	// Only allow POST
 	if r.Method != http.MethodPost {
-		log.Printf("Invalid method %s on %s", r.Method, r.URL.Path)
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
-	// Parse form
+
+	// Parse form data
 	if err := r.ParseForm(); err != nil {
-		log.Printf("Invalid method %s on %s", r.Method, r.URL.Path)
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		http.Error(w, "Invalid form submission", http.StatusBadRequest)
 		return
 	}
+
 	email := r.FormValue("email")
 	password := r.FormValue("password")
 
@@ -128,21 +131,24 @@ func AuthLoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Create a session
-	session, _ := store.Get(r, "session-name")
+	// Create or retrieve session
+	session, err := store.Get(r, "session")
+	if err != nil {
+		http.Error(w, "Could not create session", http.StatusInternalServerError)
+		return
+	}
 
 	// Save user info in session
 	session.Values["userID"] = user.ID
 	session.Values["userName"] = user.Names
 	session.Values["userEmail"] = user.Email
 
-	// Save session to the response
-	err = session.Save(r, w)
-	if err != nil {
+	// Commit session
+	if err := session.Save(r, w); err != nil {
 		http.Error(w, "Could not save session", http.StatusInternalServerError)
 		return
 	}
 
-	// Redirect or respond
+	// Redirect to dashboard
 	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 }
