@@ -1,0 +1,69 @@
+:root {
+    --primary-green: #28a745;
+    --light-green: #34ce57;
+    --dark-green: #1e7e34;
+}
+
+.role-switcher {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+    color: white;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+}
+
+.logo-text {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.task-pending { background-color: #fff3cd; }
+.task-completed { background-color: #d1edff; }
+.task-confirmed { background-color: #d4edda; }
+
+.status-badge {
+    font-size: 0.8em;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.status-pending { background-color: #ffc107; color: #212529; }
+.status-completed { background-color: #17a2b8; color: white; }
+.status-confirmed { background-color: #28a745; color: white; }
+
+.priority-high { border-left: 4px solid #dc3545; }
+.priority-medium { border-left: 4px solid #ffc107; }
+.priority-low { border-left: 4px solid #28a745; }
+
+.card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.btn-action {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    margin: 0 0.1rem;
+}
+
+.staff-view { display: none; }
+.manager-view { display: block; }

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskly Go</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container-fluid py-4">
+    <!-- Role Switcher -->
+    <div class="role-switcher text-center">
+        <div class="logo-container">
+            <div class="logo-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="#28a745"/>
+                </svg>
+            </div>
+            <h3 class="logo-text">Taskly Go</h3>
+        </div>
+        <div class="mt-3">
+            <label class="me-3">Switch View:</label>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-light active" id="managerViewBtn">
+                    <i class="fas fa-user-tie me-1"></i>Manager
+                </button>
+                <button type="button" class="btn btn-outline-light" id="staffViewBtn">
+                    <i class="fas fa-user me-1"></i>Staff
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manager View -->
+    <div id="managerView" class="manager-view">
+        <div class="row">
+            <!-- Create Task Form -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-plus me-2"></i>Create New Task</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="taskForm">
+                            <div class="mb-3">
+                                <label for="taskTitle" class="form-label">Task Title</label>
+                                <input type="text" class="form-control" id="taskTitle" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="taskDescription" class="form-label">Description</label>
+                                <textarea class="form-control" id="taskDescription" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="assignedTo" class="form-label">Assign To</label>
+                                <select class="form-select" id="assignedTo" required>
+                                    <option value="">Select Staff Member</option>
+                                    <option value="John Smith">John Smith</option>
+                                    <option value="Sarah Johnson">Sarah Johnson</option>
+                                    <option value="Mike Davis">Mike Davis</option>
+                                    <option value="Emma Wilson">Emma Wilson</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="priority" class="form-label">Priority</label>
+                                <select class="form-select" id="priority" required>
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="dueDate" class="form-label">Due Date</label>
+                                <input type="date" class="form-control" id="dueDate" required>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fas fa-plus me-1"></i>Create Task
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task Management Table -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-list me-2"></i>All Tasks</h5>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-outline-secondary active" data-filter="all">All</button>
+                            <button type="button" class="btn btn-outline-warning" data-filter="pending">Pending</button>
+                            <button type="button" class="btn btn-outline-info" data-filter="completed">Awaiting Confirmation</button>
+                            <button type="button" class="btn btn-outline-success" data-filter="confirmed">Confirmed</button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Task</th>
+                                    <th>Assigned To</th>
+                                    <th>Priority</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody id="managerTaskTable">
+                                <!-- Tasks will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Staff View -->
+    <div id="staffView" class="staff-view">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Staff Selection -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-user me-2"></i>Staff Member</h5>
+                    </div>
+                    <div class="card-body">
+                        <select class="form-select" id="staffSelector">
+                            <option value="">Select your name</option>
+                            <option value="John Smith">John Smith</option>
+                            <option value="Sarah Johnson">Sarah Johnson</option>
+                            <option value="Mike Davis">Mike Davis</option>
+                            <option value="Emma Wilson">Emma Wilson</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Staff Tasks Table -->
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>My Tasks</h5>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-outline-secondary active" data-filter-staff="all">All</button>
+                            <button type="button" class="btn btn-outline-warning" data-filter-staff="pending">To Do</button>
+                            <button type="button" class="btn btn-outline-info" data-filter-staff="completed">Awaiting Approval</button>
+                            <button type="button" class="btn btn-outline-success" data-filter-staff="confirmed">Confirmed</button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Task</th>
+                                    <th>Priority</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody id="staffTaskTable">
+                                <!-- Staff tasks will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Task Detail Modal -->
+<div class="modal fade" id="taskDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Task details will be populated here -->
+            </div>
+            <div class="modal-footer" id="modalFooter">
+                <!-- Action buttons will be populated here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Task data structure
+    let tasks = [
+        {
+            id: 1,
+            title: "Update Website Content",
+            description: "Update the homepage content with new product information and testimonials.",
+            assignedTo: "John Smith",
+            priority: "high",
+            dueDate: "2025-09-05",
+            status: "pending",
+            createdDate: "2025-08-28"
+        },
+        {
+            id: 2,
+            title: "Prepare Monthly Report",
+            description: "Compile and analyze sales data for August 2025 monthly report.",
+            assignedTo: "Sarah Johnson",
+            priority: "medium",
+            dueDate: "2025-09-01",
+            status: "completed",
+            createdDate: "2025-08-25"
+        },
+        {
+            id: 3,
+            title: "Client Follow-up Calls",
+            description: "Contact 5 potential clients from last week's trade show.",
+            assignedTo: "Mike Davis",
+            priority: "low",
+            dueDate: "2025-08-30",
+            status: "confirmed",
+            createdDate: "2025-08-26"
+        }
+    ];
+
+    let taskIdCounter = 4;
+    let currentView = 'manager';
+    let currentStaff = '';
+
+    // View switching
+    document.getElementById('managerViewBtn').addEventListener('click', () => switchView('manager'));
+    document.getElementById('staffViewBtn').addEventListener('click', () => switchView('staff'));
+
+    function switchView(view) {
+        currentView = view;
+
+        // Update active button
+        document.querySelectorAll('.btn-group button').forEach(btn => btn.classList.remove('active'));
+        if (view === 'manager') {
+            document.getElementById('managerViewBtn').classList.add('active');
+            document.getElementById('managerView').style.display = 'block';
+            document.getElementById('staffView').style.display = 'none';
+            renderManagerTasks();
+        } else {
+            document.getElementById('staffViewBtn').classList.add('active');
+            document.getElementById('managerView').style.display = 'none';
+            document.getElementById('staffView').style.display = 'block';
+            renderStaffTasks();
+        }
+    }
+
+    // Task creation form
+    document.getElementById('taskForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const newTask = {
+            id: taskIdCounter++,
+            title: document.getElementById('taskTitle').value,
+            description: document.getElementById('taskDescription').value,
+            assignedTo: document.getElementById('assignedTo').value,
+            priority: document.getElementById('priority').value,
+            dueDate: document.getElementById('dueDate').value,
+            status: 'pending',
+            createdDate: new Date().toISOString().split('T')[0]
+        };
+
+        tasks.push(newTask);
+        this.reset();
+        renderManagerTasks();
+
+        // Show success message
+        showToast('Task created successfully!', 'success');
+    });
+
+    // Staff selector
+    document.getElementById('staffSelector').addEventListener('change', function() {
+        currentStaff = this.value;
+        renderStaffTasks();
+    });
+
+    // Filter functionality for manager view
+    document.querySelectorAll('[data-filter]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Update active filter
+            this.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            renderManagerTasks(this.dataset.filter);
+        });
+    });
+
+    // Filter functionality for staff view
+    document.querySelectorAll('[data-filter-staff]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Update active filter
+            this.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            renderStaffTasks(this.dataset.filterStaff);
+        });
+    });
+
+    // Render manager tasks
+    function renderManagerTasks(filter = 'all') {
+        const tbody = document.getElementById('managerTaskTable');
+        const filteredTasks = filter === 'all' ? tasks : tasks.filter(task => task.status === filter);
+
+        tbody.innerHTML = filteredTasks.map(task => {
+            const statusClass = `status-${task.status}`;
+            const priorityClass = `priority-${task.priority}`;
+            const rowClass = `task-${task.status}`;
+
+            return `
+                    <tr class="${rowClass} ${priorityClass}">
+                        <td>
+                            <div class="fw-bold">${task.title}</div>
+                            <div class="text-muted small">${task.description.substring(0, 50)}...</div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user-circle me-2 text-secondary"></i>
+                                ${task.assignedTo}
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-${getPriorityColor(task.priority)}">${task.priority.toUpperCase()}</span>
+                        </td>
+                        <td>${formatDate(task.dueDate)}</td>
+                        <td>
+                            <span class="status-badge ${statusClass}">
+                                ${getStatusIcon(task.status)} ${task.status.toUpperCase()}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-primary btn-action" onclick="viewTask(${task.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${task.status === 'completed' ?
+                `<button class="btn btn-success btn-action" onclick="confirmTask(${task.id})">
+                                    <i class="fas fa-check"></i>
+                                </button>` : ''}
+                            <button class="btn btn-outline-danger btn-action" onclick="deleteTask(${task.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+        }).join('');
+    }
+
+    // Render staff tasks
+    function renderStaffTasks(filter = 'all') {
+        const tbody = document.getElementById('staffTaskTable');
+
+        if (!currentStaff) {
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Please select your name above</td></tr>';
+            return;
+        }
+
+        const staffTasks = tasks.filter(task => task.assignedTo === currentStaff);
+        const filteredTasks = filter === 'all' ? staffTasks : staffTasks.filter(task => task.status === filter);
+
+        if (filteredTasks.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No tasks found</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = filteredTasks.map(task => {
+            const statusClass = `status-${task.status}`;
+            const priorityClass = `priority-${task.priority}`;
+            const rowClass = `task-${task.status}`;
+
+            return `
+                    <tr class="${rowClass} ${priorityClass}">
+                        <td>
+                            <div class="fw-bold">${task.title}</div>
+                            <div class="text-muted small">${task.description.substring(0, 60)}...</div>
+                        </td>
+                        <td>
+                            <span class="badge bg-${getPriorityColor(task.priority)}">${task.priority.toUpperCase()}</span>
+                        </td>
+                        <td>${formatDate(task.dueDate)}</td>
+                        <td>
+                            <span class="status-badge ${statusClass}">
+                                ${getStatusIcon(task.status)} ${task.status.toUpperCase()}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-primary btn-action" onclick="viewTask(${task.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${task.status === 'pending' ?
+                `<button class="btn btn-success btn-action" onclick="markCompleted(${task.id})">
+                                    <i class="fas fa-check"></i> Done
+                                </button>` : ''}
+                        </td>
+                    </tr>
+                `;
+        }).join('');
+    }
+
+    // Task actions
+    function markCompleted(taskId) {
+        const task = tasks.find(t => t.id === taskId);
+        if (task) {
+            task.status = 'completed';
+            renderStaffTasks();
+            showToast('Task marked as completed! Waiting for manager confirmation.', 'info');
+        }
+    }
+
+    function confirmTask(taskId) {
+        const task = tasks.find(t => t.id === taskId);
+        if (task) {
+            task.status = 'confirmed';
+            renderManagerTasks();
+            showToast('Task confirmed as completed!', 'success');
+        }
+    }
+
+    function deleteTask(taskId) {
+        if (confirm('Are you sure you want to delete this task?')) {
+            tasks = tasks.filter(t => t.id !== taskId);
+            if (currentView === 'manager') {
+                renderManagerTasks();
+            } else {
+                renderStaffTasks();
+            }
+            showToast('Task deleted successfully!', 'warning');
+        }
+    }
+
+    function viewTask(taskId) {
+        const task = tasks.find(t => t.id === taskId);
+        if (!task) return;
+
+        const modal = new bootstrap.Modal(document.getElementById('taskDetailModal'));
+
+        document.getElementById('modalTitle').innerHTML = `<i class="fas fa-info-circle me-2"></i>${task.title}`;
+        document.getElementById('modalBody').innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Description</h6>
+                        <p class="text-muted">${task.description}</p>
+
+                        <h6>Assigned To</h6>
+                        <p><i class="fas fa-user me-2"></i>${task.assignedTo}</p>
+
+                        <h6>Priority</h6>
+                        <p><span class="badge bg-${getPriorityColor(task.priority)}">${task.priority.toUpperCase()}</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Due Date</h6>
+                        <p><i class="fas fa-calendar me-2"></i>${formatDate(task.dueDate)}</p>
+
+                        <h6>Created Date</h6>
+                        <p><i class="fas fa-calendar-plus me-2"></i>${formatDate(task.createdDate)}</p>
+
+                        <h6>Status</h6>
+                        <p><span class="status-badge status-${task.status}">${getStatusIcon(task.status)} ${task.status.toUpperCase()}</span></p>
+                    </div>
+                </div>
+            `;
+
+        let footerButtons = '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>';
+
+        if (currentView === 'manager' && task.status === 'completed') {
+            footerButtons += `<button type="button" class="btn btn-success" onclick="confirmTask(${task.id}); modal.hide();">
+                    <i class="fas fa-check me-1"></i>Confirm Completed
+                </button>`;
+        }
+
+        if (currentView === 'staff' && task.assignedTo === currentStaff && task.status === 'pending') {
+            footerButtons += `<button type="button" class="btn btn-success" onclick="markCompleted(${task.id}); modal.hide();">
+                    <i class="fas fa-check me-1"></i>Mark as Done
+                </button>`;
+        }
+
+        document.getElementById('modalFooter').innerHTML = footerButtons;
+        modal.show();
+    }
+
+    // Utility functions
+    function getPriorityColor(priority) {
+        switch(priority) {
+            case 'high': return 'danger';
+            case 'medium': return 'warning';
+            case 'low': return 'success';
+            default: return 'secondary';
+        }
+    }
+
+    function getStatusIcon(status) {
+        switch(status) {
+            case 'pending': return '<i class="fas fa-clock"></i>';
+            case 'completed': return '<i class="fas fa-hourglass-half"></i>';
+            case 'confirmed': return '<i class="fas fa-check-circle"></i>';
+            default: return '<i class="fas fa-question"></i>';
+        }
+    }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    }
+
+    function showToast(message, type) {
+        // Create toast container if it doesn't exist
+        let toastContainer = document.querySelector('.toast-container');
+        if (!toastContainer) {
+            toastContainer = document.createElement('div');
+            toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+            toastContainer.style.zIndex = '9999';
+            document.body.appendChild(toastContainer);
+        }
+
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info'} border-0`;
+        toast.setAttribute('role', 'alert');
+        toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">${message}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+
+        toastContainer.appendChild(toast);
+        const bsToast = new bootstrap.Toast(toast, { delay: 3000 });
+        bsToast.show();
+
+        // Remove toast element after it's hidden
+        toast.addEventListener('hidden.bs.toast', () => toast.remove());
+    }
+
+    // Set default due date to tomorrow
+    document.getElementById('dueDate').valueAsDate = new Date(Date.now() + 86400000);
+
+    // Initialize the application
+    renderManagerTasks();
+</script>
+</body>
+</html>
