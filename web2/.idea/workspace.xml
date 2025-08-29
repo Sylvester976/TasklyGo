@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cf078737-298a-4f0b-b093-7a4aeb66c892" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/static/css/task.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/task.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/css/manager.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/manager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/task.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/task.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/manager_tasks.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/manager_tasks.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/staff_tasks.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/staff_tasks.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
