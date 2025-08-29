@@ -156,7 +156,7 @@ func AuthLoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func staffTaskHandler(w http.ResponseWriter, r *http.Request) {
+func StaffTaskHandler(w http.ResponseWriter, r *http.Request) {
 	sess, err := session.Store.Get(r, "session")
 	if err != nil {
 		http.Error(w, "Could not retrieve session", http.StatusInternalServerError)
@@ -203,7 +203,7 @@ func staffTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func managerTaskHandler(w http.ResponseWriter, r *http.Request) {
+func ManagerTaskHandler(w http.ResponseWriter, r *http.Request) {
 	sess, err := session.Store.Get(r, "session")
 	if err != nil {
 		http.Error(w, "Could not retrieve session", http.StatusInternalServerError)
