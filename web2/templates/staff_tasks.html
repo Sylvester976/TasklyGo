@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard - Taskly Go</title>
+    <link href="/static/img/logofav.svg" rel="icon" type="image/x-icon">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/all.min.css" rel="stylesheet">
+    <link href="/static/css/task.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="header-section text-center">
+        <div class="logo-container">
+            <div class="logo-icon">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="#28a745"/>
+                </svg>
+            </div>
+            <h1 class="logo-text">Taskly Go</h1>
+        </div>
+        <p class="mb-3 opacity-90">Staff Dashboard</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Staff Tasks Table -->
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clipboard-list me-2"></i>My Tasks
+                        <span class="text-muted fs-6">(John Smith)</span>
+                    </h5>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <a href="?staff=john_smith&filter=all" class="btn btn-outline-secondary">All</a>
+                        <a href="?staff=john_smith&filter=pending" class="btn btn-outline-warning">To Do</a>
+                        <a href="?staff=john_smith&filter=completed" class="btn btn-outline-info">Awaiting Approval</a>
+                        <a href="?staff=john_smith&filter=confirmed" class="btn btn-outline-success">Confirmed</a>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Task</th>
+                                <th>Priority</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Sample Task for John Smith - Pending -->
+                            <tr class="task-pending priority-high">
+                                <td>
+                                    <div class="fw-bold">Update Website Content</div>
+                                    <div class="text-muted small">Update the homepage content with new product information and testimonials. Ensure all links are working properly.</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-danger">HIGH</span>
+                                </td>
+                                <td>
+                                    <span class="text-danger fw-bold">Sep 5, 2025</span>
+                                    <div class="small text-muted">6 days left</div>
+                                </td>
+                                <td>
+                                            <span class="status-badge status-pending">
+                                                <i class="fas fa-clock"></i> TO DO
+                                            </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-outline-primary btn-action" data-bs-toggle="modal" data-bs-target="#taskDetailModal">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <form action="/tasks/1/complete" method="POST" style="display: inline;">
+                                        <input type="hidden" name="staff_id" value="john_smith">
+                                        <button type="submit" class="btn btn-success btn-action">
+                                            <i class="fas fa-check"></i> Done
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+
+                            <!-- Sample Completed Task -->
+                            <tr class="task-completed priority-medium">
+                                <td>
+                                    <div class="fw-bold">Database Backup</div>
+                                    <div class="text-muted small">Perform weekly database backup and verify integrity of backup files.</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-warning">MEDIUM</span>
+                                </td>
+                                <td>
+                                    <span class="text-success">Aug 28, 2025</span>
+                                    <div class="small text-muted">Completed</div>
+                                </td>
+                                <td>
+                                            <span class="status-badge status-completed">
+                                                <i class="fas fa-hourglass-half"></i> AWAITING APPROVAL
+                                            </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-outline-primary btn-action" data-bs-toggle="modal" data-bs-target="#taskDetailModal">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <span class="text-muted small">Waiting for manager...</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Task Detail Modal -->
+<div class="modal fade" id="taskDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-info-circle me-2"></i>Task Details
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Task Title</h6>
+                        <p class="fw-bold">Update Website Content</p>
+
+                        <h6>Description</h6>
+                        <p class="text-muted">Update the homepage content with new product information and testimonials. Ensure all links are working and images are optimized.</p>
+
+                        <h6>Assigned By</h6>
+                        <p><i class="fas fa-user-tie me-2"></i>Manager</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Priority</h6>
+                        <p><span class="badge bg-danger">HIGH</span></p>
+
+                        <h6>Due Date</h6>
+                        <p><i class="fas fa-calendar me-2"></i>September 5, 2025</p>
+
+                        <h6>Assigned Date</h6>
+                        <p><i class="fas fa-calendar-plus me-2"></i>August 28, 2025</p>
+
+                        <h6>Status</h6>
+                        <p><span class="status-badge status-pending"><i class="fas fa-clock"></i> TO DO</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <!-- Action buttons for staff tasks -->
+                <form action="/tasks/1/complete" method="POST" style="display: inline;">
+                    <input type="hidden" name="staff_id" value="john_smith">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check me-1"></i>Mark as Done
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/task.js"></script>
+</body>
+</html>
