@@ -91,3 +91,31 @@
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     border: 2px solid var(--primary-green);
 }
+
+.header-section {
+    position: relative;
+}
+
+.logout-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+    color: white;
+    text-decoration: none;
+}
+
+.logout-btn i {
+    margin-right: 5px;
+}
