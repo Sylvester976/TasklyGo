@@ -95,8 +95,7 @@ func AuthRegisterHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error saving user", http.StatusInternalServerError)
 		return
 	}
-
-	log.Printf("User %s registered with ID %d", user.Email, user.ID)
+	// Redirect to login page after successful registration
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 
 }
@@ -248,4 +247,29 @@ func ManagerTaskHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to render page", http.StatusInternalServerError)
 		return
 	}
+
+}
+
+func AuthLogoutHandler(w http.ResponseWriter, r *http.Request) {
+	// Retrieve the session
+	sess, err := session.Store.Get(r, "session")
+	if err != nil {
+		http.Error(w, "Could not retrieve session", http.StatusInternalServerError)
+		return
+	}
+
+	// Clear session values
+	sess.Values = make(map[interface{}]interface{})
+
+	// Mark session for deletion by setting MaxAge to -1
+	sess.Options.MaxAge = -1
+
+	// Save the session
+	if err := sess.Save(r, w); err != nil {
+		http.Error(w, "Could not clear session", http.StatusInternalServerError)
+		return
+	}
+
+	// Redirect to login page or homepage
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
