@@ -12,5 +12,6 @@ func SetupRoutes() {
 	http.HandleFunc("/login", handlers.AuthLoginHandler)
 	http.HandleFunc("/task", handlers.StaffTaskHandler)
 	http.HandleFunc("/manager", handlers.ManagerTaskHandler)
+	http.HandleFunc("/logout", handlers.AuthLogoutHandler)
 
 }

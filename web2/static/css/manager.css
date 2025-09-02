@@ -86,3 +86,31 @@
 .navigation-links a.active {
     background-color: rgba(255, 255, 255, 0.3);
 }
+
+.header-section {
+    position: relative;
+}
+
+.logout-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+    color: white;
+    text-decoration: none;
+}
+
+.logout-btn i {
+    margin-right: 5px;
+}
