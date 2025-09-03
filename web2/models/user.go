@@ -67,3 +67,52 @@ func GetUserByEmailAndPassword(ctx context.Context, email, plainPassword string)
 
 	return &u, nil
 }
+
+func GetAllUsers(ctx context.Context) ([]User, error) {
+	rows, err := db.Pool.Query(ctx, `
+		SELECT id, names, email, roles, status, created_at, updated_at
+		FROM users
+		ORDER BY created_at DESC
+	`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []User
+	for rows.Next() {
+		var u User
+		if err := rows.Scan(
+			&u.ID,
+			&u.Names,
+			&u.Email,
+			&u.Roles,
+			&u.Status,
+			&u.CreatedAt,
+			&u.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		users = append(users, u)
+	}
+	return users, nil
+}
+
+func GetAllUserNamesAndIds(ctx context.Context) ([]User, error) {
+	query := `SELECT id, names FROM users`
+	rows, err := db.Pool.Query(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []User
+	for rows.Next() {
+		var u User
+		if err := rows.Scan(&u.ID, &u.Names); err != nil {
+			return nil, err
+		}
+		users = append(users, u)
+	}
+	return users, nil
+}

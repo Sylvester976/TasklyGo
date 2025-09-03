@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Manager Dashboard - Taskly Go</title>
     <link href="/static/img/logofav.svg" rel="icon" type="image/x-icon">
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
@@ -15,7 +15,7 @@
     <div class="header-section text-center">
         <div class="logo-container">
             <div class="logo-icon">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                <svg fill="none" height="30" viewBox="0 0 24 24" width="30">
                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="#28a745"/>
                 </svg>
             </div>
@@ -37,15 +37,16 @@
                 <div class="card-body">
                     <form action="/tasks/create" method="POST">
                         <div class="mb-3">
-                            <label for="title" class="form-label">Task Title</label>
-                            <input type="text" class="form-control" id="title" name="title" required>
+                            <label class="form-label" for="title">Task Title</label>
+                            <input class="form-control" id="title" name="title" required type="text">
                         </div>
                         <div class="mb-3">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                            <label class="form-label" for="description">Description</label>
+                            <textarea class="form-control" id="description" name="description" required
+                                      rows="3"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="assigned_to" class="form-label">Assign To</label>
+                            <label class="form-label" for="assigned_to">Assign To</label>
                             <select class="form-select" id="assigned_to" name="assigned_to" required>
                                 <option value="">Select Staff Member</option>
                                 <option value="john_smith">John Smith</option>
@@ -55,18 +56,18 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="priority" class="form-label">Priority</label>
+                            <label class="form-label" for="priority">Priority</label>
                             <select class="form-select" id="priority" name="priority" required>
                                 <option value="low">Low</option>
-                                <option value="medium" selected>Medium</option>
+                                <option selected value="medium">Medium</option>
                                 <option value="high">High</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="due_date" class="form-label">Due Date</label>
-                            <input type="date" class="form-control" id="due_date" name="due_date" required>
+                            <label class="form-label" for="due_date">Due Date</label>
+                            <input class="form-control" id="due_date" name="due_date" required type="date">
                         </div>
-                        <button type="submit" class="btn btn-success w-100">
+                        <button class="btn btn-success w-100" type="submit">
                             <i class="fas fa-plus me-1"></i>Create Task
                         </button>
                     </form>
@@ -80,129 +81,57 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0"><i class="fas fa-list me-2"></i>All Tasks</h5>
                     <div class="btn-group btn-group-sm" role="group">
-                        <a href="?filter=all" class="btn btn-outline-secondary">All</a>
-                        <a href="?filter=pending" class="btn btn-outline-warning">Pending</a>
-                        <a href="?filter=completed" class="btn btn-outline-info">Awaiting Confirmation</a>
-                        <a href="?filter=confirmed" class="btn btn-outline-success">Confirmed</a>
+                        <a class="btn btn-outline-secondary" href="?filter=all">All</a>
+                        <a class="btn btn-outline-warning" href="?filter=pending">Pending</a>
+                        <a class="btn btn-outline-info" href="?filter=completed">Awaiting Confirmation</a>
+                        <a class="btn btn-outline-success" href="?filter=confirmed">Confirmed</a>
                     </div>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-hover mb-0">
+                        <table class="table table-hover mb-0 table bordered">
                             <thead class="table-light">
                             <tr>
+                                <th></th>
                                 <th>Task</th>
                                 <th>Assigned To</th>
-                                <th>Priority</th>
-                                <th>Due Date</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <!-- Sample Task 1 - Pending -->
-                            <tr class="task-pending priority-high">
+                            {{ range $i, $t := .AllTasks }}
+                            <tr>
+                                <td>{{ add $i 1 }}</td> <!-- numbering (starts from 1) -->
+                                <td>{{ $t.Title }}</td>
+                                <td>{{ $t.UserName }}</td>
                                 <td>
-                                    <div class="fw-bold">Update Website Content</div>
-                                    <div class="text-muted small">Update the homepage content with new product...</div>
+                                    {{ if $t.Status }}
+                                    <span class="badge bg-success">Done</span>
+                                    {{ else }}
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                    {{ end }}
                                 </td>
                                 <td>
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-user-circle me-2 text-secondary"></i>
-                                        John Smith
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="badge bg-danger">HIGH</span>
-                                </td>
-                                <td>Sep 5, 2025</td>
-                                <td>
-                                            <span class="status-badge status-pending">
-                                                <i class="fas fa-clock"></i> PENDING
-                                            </span>
-                                </td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-action" data-bs-toggle="modal" data-bs-target="#taskDetailModal">
+                                    <button class="btn btn-outline-primary btn-action" data-bs-target="#taskDetailModal"
+                                            data-bs-toggle="modal">
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    <form action="/tasks/1/delete" method="POST" style="display: inline;">
-                                        <button type="submit" class="btn btn-outline-danger btn-action" onclick="return confirm('Delete this task?')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-
-                            <!-- Sample Task 2 - Completed (Awaiting Confirmation) -->
-                            <tr class="task-completed priority-medium">
-                                <td>
-                                    <div class="fw-bold">Prepare Monthly Report</div>
-                                    <div class="text-muted small">Compile and analyze sales data for August...</div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-user-circle me-2 text-secondary"></i>
-                                        Sarah Johnson
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="badge bg-warning">MEDIUM</span>
-                                </td>
-                                <td>Sep 1, 2025</td>
-                                <td>
-                                            <span class="status-badge status-completed">
-                                                <i class="fas fa-hourglass-half"></i> COMPLETED
-                                            </span>
-                                </td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-action" data-bs-toggle="modal" data-bs-target="#taskDetailModal">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <form action="/tasks/2/confirm" method="POST" style="display: inline;">
-                                        <button type="submit" class="btn btn-success btn-action">
+                                    <form action="/tasks/{{ $t.ID }}/confirm" method="POST" style="display: inline;">
+                                        <button class="btn btn-success btn-action" type="submit">
                                             <i class="fas fa-check"></i>
                                         </button>
                                     </form>
-                                    <form action="/tasks/2/delete" method="POST" style="display: inline;">
-                                        <button type="submit" class="btn btn-outline-danger btn-action" onclick="return confirm('Delete this task?')">
+                                    <form action="/tasks/{{ $t.ID }}/delete" method="POST" style="display: inline;">
+                                        <button class="btn btn-outline-danger btn-action"
+                                                onclick="return confirm('Delete this task?')"
+                                                type="submit">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
                                 </td>
                             </tr>
-
-                            <!-- Sample Task 3 - Confirmed -->
-                            <tr class="task-confirmed priority-low">
-                                <td>
-                                    <div class="fw-bold">Client Follow-up Calls</div>
-                                    <div class="text-muted small">Contact 5 potential clients from last week's...</div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-user-circle me-2 text-secondary"></i>
-                                        Mike Davis
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="badge bg-success">LOW</span>
-                                </td>
-                                <td>Aug 30, 2025</td>
-                                <td>
-                                            <span class="status-badge status-confirmed">
-                                                <i class="fas fa-check-circle"></i> CONFIRMED
-                                            </span>
-                                </td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-action" data-bs-toggle="modal" data-bs-target="#taskDetailModal">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <form action="/tasks/3/delete" method="POST" style="display: inline;">
-                                        <button type="submit" class="btn btn-outline-danger btn-action" onclick="return confirm('Delete this task?')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
+                            {{ end }}
                             </tbody>
                         </table>
                     </div>
@@ -220,7 +149,7 @@
                 <h5 class="modal-title">
                     <i class="fas fa-info-circle me-2"></i>Task Details
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button class="btn-close" data-bs-dismiss="modal" type="button"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -229,7 +158,8 @@
                         <p class="fw-bold">Update Website Content</p>
 
                         <h6>Description</h6>
-                        <p class="text-muted">Update the homepage content with new product information and testimonials. Ensure all links are working and images are optimized.</p>
+                        <p class="text-muted">Update the homepage content with new product information and testimonials.
+                            Ensure all links are working and images are optimized.</p>
 
                         <h6>Assigned To</h6>
                         <p><i class="fas fa-user me-2"></i>John Smith</p>
@@ -250,10 +180,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
                 <!-- Action buttons will vary based on task status -->
-                <form action="/tasks/1/confirm" method="POST" style="display: inline;" class="d-none">
-                    <button type="submit" class="btn btn-success">
+                <form action="/tasks/1/confirm" class="d-none" method="POST" style="display: inline;">
+                    <button class="btn btn-success" type="submit">
                         <i class="fas fa-check me-1"></i>Confirm Completed
                     </button>
                 </form>
