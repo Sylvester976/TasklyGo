@@ -97,3 +97,39 @@ func GetAllUsers(ctx context.Context) ([]User, error) {
 	}
 	return users, nil
 }
+
+func GetAllUserNamesAndIds(ctx context.Context) (map[int]string, error) {
+	query := `SELECT id, name FROM users`
+
+	rows, err := db.Pool.Query(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	userMap := make(map[int]string)
+	for rows.Next() {
+		var id int
+		var name string
+		if err := rows.Scan(&id, &name); err != nil {
+			return nil, err
+		}
+		userMap[id] = name
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return userMap, nil
+}
+
+func getUserNameById(id int) string {
+	var name string
+	query := `SELECT names FROM users WHERE id = $1`
+	err := db.Pool.QueryRow(context.Background(), query, id).Scan(&name)
+	if err != nil {
+		return "Unknown"
+	}
+	return name
+}

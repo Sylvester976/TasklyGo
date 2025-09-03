@@ -4,6 +4,7 @@ import (
 	"regexp"
 
 	"golang.org/x/crypto/bcrypt"
+	"web2/models"
 )
 
 // CheckPasswordStrength checks how strong a password is.
@@ -46,4 +47,9 @@ func HashPassword(password string) (string, error) {
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+
+func getPeopleById(id int) {
+	name, _ := models.getUserNameById(id)
+	return name
 }

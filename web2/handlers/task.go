@@ -82,7 +82,7 @@ func ManagerTaskHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	allUsers, _ := models.GetAllUsers(r.Context())
+	allUsers, _ := models.GetAllUserNamesAndIds(r.Context())
 	all_tasks, _ := models.GetAllTasks(r.Context())
 
 	tmpl, err := template.ParseFiles("./templates/manager_tasks.html")
@@ -94,8 +94,8 @@ func ManagerTaskHandler(w http.ResponseWriter, r *http.Request) {
 
 	data := struct {
 		UserName string
-		AllUsers interface{}
-		AllTasks interface{}
+		AllUsers []models.User
+		AllTasks []models.Task
 		userID   int
 	}{
 		UserName: sess.Values["userName"].(string),

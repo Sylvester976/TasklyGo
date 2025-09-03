@@ -88,72 +88,21 @@
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-hover mb-0">
+                        <table class="table table-hover mb-0 table bordered" >
                             <thead class="table-light">
                             <tr>
                                 <th>Task</th>
                                 <th>Assigned To</th>
-                                <th>Priority</th>
-                                <th>Due Date</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <!-- Sample Task 1 - Pending -->
+                            {{ range .AllTasks }}
                             <tr class="task-pending priority-high">
-                                <td>
-                                    <div class="fw-bold">Update Website Content</div>
-                                    <div class="text-muted small">Update the homepage content with new product...</div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-user-circle me-2 text-secondary"></i>
-                                        John Smith
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="badge bg-danger">HIGH</span>
-                                </td>
-                                <td>Sep 5, 2025</td>
-                                <td>
-                                            <span class="status-badge status-pending">
-                                                <i class="fas fa-clock"></i> PENDING
-                                            </span>
-                                </td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-action" data-bs-toggle="modal" data-bs-target="#taskDetailModal">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <form action="/tasks/1/delete" method="POST" style="display: inline;">
-                                        <button type="submit" class="btn btn-outline-danger btn-action" onclick="return confirm('Delete this task?')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-
-                            <!-- Sample Task 2 - Completed (Awaiting Confirmation) -->
-                            <tr class="task-completed priority-medium">
-                                <td>
-                                    <div class="fw-bold">Prepare Monthly Report</div>
-                                    <div class="text-muted small">Compile and analyze sales data for August...</div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-user-circle me-2 text-secondary"></i>
-                                        Sarah Johnson
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="badge bg-warning">MEDIUM</span>
-                                </td>
-                                <td>Sep 1, 2025</td>
-                                <td>
-                                            <span class="status-badge status-completed">
-                                                <i class="fas fa-hourglass-half"></i> COMPLETED
-                                            </span>
-                                </td>
+                                <td>{{ .Title }}</td>
+                                <td>{{ .User_id}}</td>
+                                <td>{{ .Status }}</td>
                                 <td>
                                     <button class="btn btn-outline-primary btn-action" data-bs-toggle="modal" data-bs-target="#taskDetailModal">
                                         <i class="fas fa-eye"></i>
@@ -163,46 +112,14 @@
                                             <i class="fas fa-check"></i>
                                         </button>
                                     </form>
-                                    <form action="/tasks/2/delete" method="POST" style="display: inline;">
+                                    <form action="/tasks/1/delete" method="POST" style="display: inline;">
                                         <button type="submit" class="btn btn-outline-danger btn-action" onclick="return confirm('Delete this task?')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
                                 </td>
                             </tr>
-
-                            <!-- Sample Task 3 - Confirmed -->
-                            <tr class="task-confirmed priority-low">
-                                <td>
-                                    <div class="fw-bold">Client Follow-up Calls</div>
-                                    <div class="text-muted small">Contact 5 potential clients from last week's...</div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-user-circle me-2 text-secondary"></i>
-                                        Mike Davis
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="badge bg-success">LOW</span>
-                                </td>
-                                <td>Aug 30, 2025</td>
-                                <td>
-                                            <span class="status-badge status-confirmed">
-                                                <i class="fas fa-check-circle"></i> CONFIRMED
-                                            </span>
-                                </td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-action" data-bs-toggle="modal" data-bs-target="#taskDetailModal">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <form action="/tasks/3/delete" method="POST" style="display: inline;">
-                                        <button type="submit" class="btn btn-outline-danger btn-action" onclick="return confirm('Delete this task?')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
+                            {{ end }}
                             </tbody>
                         </table>
                     </div>
