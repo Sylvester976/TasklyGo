@@ -136,6 +136,7 @@ func AuthLoginHandler(w http.ResponseWriter, r *http.Request) {
 	sess.Values["userID"] = user.ID
 	sess.Values["userName"] = user.Names
 	sess.Values["userEmail"] = user.Email
+	sess.Values["userRoles"] = user.Roles
 
 	// Commit session
 	if err := sess.Save(r, w); err != nil {
