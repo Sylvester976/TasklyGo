@@ -49,10 +49,9 @@
                             <label class="form-label" for="assigned_to">Assign To</label>
                             <select class="form-select" id="assigned_to" name="assigned_to" required>
                                 <option value="">Select Staff Member</option>
-                                <option value="john_smith">John Smith</option>
-                                <option value="sarah_johnson">Sarah Johnson</option>
-                                <option value="mike_davis">Mike Davis</option>
-                                <option value="emma_wilson">Emma Wilson</option>
+                                {{ range .AllUsers }}
+                                    <option value="{{ .ID }}">{{ .Names }}</option>
+                                {{ end }}
                             </select>
                         </div>
                         <div class="mb-3">
