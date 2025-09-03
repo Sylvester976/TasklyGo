@@ -23,7 +23,7 @@ func StaffTaskHandler(w http.ResponseWriter, r *http.Request) {
 
 	//modify later to work with alerts
 	userRoles, ok := sess.Values["userRoles"].(int)
-	if !ok || userRoles != 2 {
+	if !ok || userRoles != 1 {
 		http.Redirect(w, r, "/manager", http.StatusSeeOther)
 		return
 	}
@@ -77,7 +77,7 @@ func ManagerTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userRoles, ok := sess.Values["userRoles"].(int)
-	if !ok || userRoles != 1 {
+	if !ok || userRoles != 2 {
 		http.Redirect(w, r, "/task", http.StatusSeeOther)
 		return
 	}
@@ -96,6 +96,7 @@ func ManagerTaskHandler(w http.ResponseWriter, r *http.Request) {
 		UserName string
 		AllUsers interface{}
 		AllTasks interface{}
+		userID   int
 	}{
 		UserName: sess.Values["userName"].(string),
 		AllUsers: allUsers,

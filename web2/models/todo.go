@@ -1,6 +1,11 @@
 package models
 
-import "time"
+import (
+	"context"
+	"time"
+
+	"web2/db"
+)
 
 type Task struct {
 	ID          int
