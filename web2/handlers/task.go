@@ -83,19 +83,20 @@ func ManagerTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	allUsers, _ := models.GetAllUserNamesAndIds(r.Context())
-	all_tasks, _ := models.GetAllTasks(r.Context())
+	all_tasks, _ := models.GetAllTasksWithUsers(r.Context())
 
-	tmpl, err := template.ParseFiles("./templates/manager_tasks.html")
-	if err != nil {
-		log.Println("Template parse error:", err)
-		http.Error(w, "Template error", http.StatusInternalServerError)
-		return
-	}
+	tmpl := template.Must(
+		template.New("manager_tasks.html").
+			Funcs(template.FuncMap{
+				"add": func(a, b int) int { return a + b },
+			}).
+			ParseFiles("./templates/manager_tasks.html"),
+	)
 
 	data := struct {
 		UserName string
 		AllUsers []models.User
-		AllTasks []models.Task
+		AllTasks []models.TaskWithUser
 		userID   int
 	}{
 		UserName: sess.Values["userName"].(string),
