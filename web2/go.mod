@@ -1,10 +1,10 @@
 module web2
 
-go 1.24.4
+go 1.25.0
 
 require (
 	github.com/gorilla/sessions v1.4.0
-	github.com/jackc/pgx/v5 v5.7.5
+	github.com/jackc/pgx/v5 v5.9.0
 	github.com/joho/godotenv v1.5.1
 	golang.org/x/crypto v0.45.0
 )
